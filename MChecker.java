@@ -5,82 +5,69 @@ import java.util.ArrayList;
  */
 public class MChecker {
     private MStack equationStack;
-    private ArrayList<MSym> symbols;
+    private String equation;
+    private ArrayList<MSymbols> symbols;
     private MStack formattedStack;
+    private String output;
 
-    public MChecker(String equation, ArrayList<MSym> symbols) {
+    public MChecker(String equation, ArrayList<MSymbols> symbols) {
         this.formattedStack = new MStack();
-        this.fillStack(equation);
+        this.equation = equation;
         this.symbols = symbols;
+        this.output = "";
+        this.fillStack(equation);
+
+        System.out.println(equation);
+        System.out.println(symbols.size());
+        for (MSymbols s: symbols) {
+            System.out.println(s.getLabel());
+        }
     }
 
     private void fillStack(String equation) {
         this.equationStack = new MStack();
 
-        for (int index = equation.length() - 1; index > -1; index--)
-            this.equationStack.push(equation.charAt(index));
+        String temp = "";
+
+        for (int index = 0; index < equation.length(); index++) {
+            temp += equation.charAt(index);
+
+            int position = Helpers.isInList(this.symbols, temp);
+            if (position != -1) {
+                this.equationStack.push(this.symbols.get(position));
+                temp = "";
+            } else if (Helpers.isOperator(equation.charAt(index))) {
+                this.equationStack.push(equation.charAt(index));
+                temp = "";
+            }
+        }
+
+        this.equationStack.reverse();
     }
 
-    public MStack type() {
+    public String postfixToInfix() {
+        MStack stack = new MStack();
+
+        System.out.println();
+        System.out.println();
         while (!this.equationStack.isEmpty()) {
-            char character = (char) this.equationStack.pop();
-
-            char nextChar;
-            try {
-                nextChar = (char) this.equationStack.pop();
-            } catch (Exception e) {
-                this.formattedStack.push(character);
-                break;
+            if (!Helpers.isSymbol(this.equationStack.peek())) {
+                String previous = (String) stack.pop();
+                stack.push("(" + stack.pop() + this.equationStack.pop() + previous + ")");
+            } else {
+                stack.push(((MSymbols) this.equationStack.pop()).getLabel());
             }
-
-            char findSign;
-            try {
-                findSign = (char) this.equationStack.peek();
-            } catch (Exception e) {
-                this.formattedStack.push(character);
-                this.formattedStack.push(nextChar);
-                break;
-            }
-
-            // check next character
-            if (isCharacter(character) && isCharacter(findSign) && isCharacter(nextChar)) {
-                this.formattedStack.push(character);
-
-                this.equationStack.push(nextChar);
-            } else if (isCharacter(character) && !isCharacter(findSign) && isCharacter(nextChar)) {
-                this.formattedStack.push(character);
-                // popping sign
-                this.formattedStack.push(this.equationStack.pop());
-
-                this.formattedStack.push(nextChar);
-            }
-
-            MStack temp = new MStack();
-            while (this.equationStack.size() > 1)
-                temp.push(this.equationStack.pop());
-
-            temp.reverse();
-            // put sign
-            this.formattedStack.push(this.equationStack.pop());
-
-            this.equationStack.clone(temp);
         }
-
-        return this.formattedStack;
+//
+//        for (char character : this.equation.toCharArray()) {
+//            if (Helpers.isOperator(character)) {
+//                String previous = (String) stack.pop();
+//                stack.push("(" + stack.pop() + character + previous + ")");
+//            } else {
+//                stack.push(String.valueOf(character));
+//            }
+//        }
+        return (String) stack.pop();
     }
 
-    private boolean isCharacter(char character) {
-        /*diagnostic*/
-//        System.out.println("For " + character + " ");
-
-        switch (character) {
-            case '+':
-            case '-':                       // precedence 1 contains + or -
-            case '*':                       // precedence 2 contains * or /
-            case '/':                       // pop the precedence
-                return false;
-            default:
-                return true;
-        }
-    }
 }
