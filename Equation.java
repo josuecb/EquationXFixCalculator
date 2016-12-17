@@ -34,7 +34,10 @@ public class Equation {
 
         while (!this.infixEquation.isEmpty()) {
             char character = (char) this.infixEquation.remove();
-//            System.out.println("removing: " + character);
+
+            // Here everything will be pushed to a wait list until finding a ')' closing parenthesis
+            // if it finds it then it will continue to do operation
+            // going backwards until it finds a '(' open parenthesis
             switch (character) {
                 case '+':
                 case '-':
@@ -95,6 +98,8 @@ public class Equation {
         Helpers.separator();
         Helpers.log("found '('", "then we must do calculation");
         Helpers.log("calculating", "infix expression");
+
+        // The flag is if it meets a open parenthesis
         while (!this.waitStack.isEmpty() && flag) {
             Helpers.log("items in wait stack", this.waitStack.size() + "");
 
@@ -105,15 +110,21 @@ public class Equation {
             else
                 Helpers.log("removing from wait stack", object + "");
 
+            // checks if object is a char or a variable if it is not a variable
+            // then it might be an operator or a parenthesis
             if (!Helpers.isVariableObject(object)) {
+                // Here it will do operation and will push the value as if it were a new variable
+                // called temp1 or whatever number the tempCount is that is why we increment the tempCount
+                // so we do not override any temp variable
                 switch ((char) object) {
                     case '+':
                         if (!tempInteger.isEmpty()) {
                             double newInt = ((ExpVariable) this.waitStack.pop()).getValue();
                             double prevInt = Double.parseDouble(tempInteger);
-                            flag = removeOpenParen();
-                            tempCount++;
+                            flag = removeOpenParen();       // checks if next is a parenthesis if so break
+                            tempCount++;                    // increment temp
                             Helpers.log("adding", newInt + " and " + prevInt);
+                            // push to waitStack
                             this.waitStack.push(new ExpVariable("temp" + tempCount, newInt + prevInt));
 //                            result = newInt + prevInt;
                         } else {
@@ -202,6 +213,9 @@ public class Equation {
         }
     }
 
+    /**
+     * This is only a log
+     */
     private void logPeek() {
         try {
             Helpers.log("pussing to wait stack", String.valueOf(((ExpVariable) this.waitStack.peek()).getValue()));
@@ -210,6 +224,10 @@ public class Equation {
         }
     }
 
+    /**
+     * Checks if next element in the wait stack is '(' if so then return true
+     * @return true if next char is a parenthesis
+     */
     private boolean removeOpenParen() {
         if (!Helpers.isVariableObject(this.waitStack.peek())) {
             // check prev char

@@ -52,7 +52,7 @@ public class MStack extends AbstractStack {
         this.clone(temp);
     }
 
-    /**5
+    /**
      * Display a sentence before every value in the stack
      *
      * @param word: the word you want to add at the begining of the sentence

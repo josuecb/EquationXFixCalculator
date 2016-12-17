@@ -9,6 +9,7 @@ public class MQueue extends AbstractQueue {
     /**
      * This makes our life easier to check a string
      * converts the string in character so we can check character by character
+     *
      * @param words: string
      */
     public MQueue(String words) {
@@ -18,6 +19,11 @@ public class MQueue extends AbstractQueue {
             this.insert(letter);
     }
 
+    /**
+     * Removes element in the front
+     *
+     * @return element removed
+     */
     public Object remove() {
         Object temp = this.elements[this.front];
         this.elements[this.front++] = null;
@@ -28,6 +34,11 @@ public class MQueue extends AbstractQueue {
         return temp;
     }
 
+    /**
+     * Add element to the Queue
+     *
+     * @param element: element to be added
+     */
     public void insert(Object element) {
         if (this.rear == this.max - 1)
             this.rear = -1;

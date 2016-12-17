@@ -52,11 +52,19 @@ public class Helpers {
         return -1;
     }
 
+    /**
+     * It outputs a format log that i designed so it outputs everything beautifully
+     * @param label: label of the log
+     * @param notice: message of the log
+     */
     public static void log(String label, String notice) {
         if (!label.isEmpty() && !notice.isEmpty())
             System.out.println(" -> " + label.substring(0, 1).toUpperCase() + label.substring(1) + ": " + notice.substring(0, 1).toUpperCase() + notice.substring(1) + ".");
     }
 
+    /**
+     * A separator
+     */
     public static void separator(){
         System.out.println(" ============================ ");
     }

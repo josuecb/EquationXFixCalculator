@@ -33,11 +33,17 @@ public class ExpChecker {
         Helpers.separator();
     }
 
+    /**
+     * Fills the equation stack erasing every space we don't need
+     *
+     * @param equation: equation from input
+     */
     private void fillStack(String equation) {
         this.equationStack = new MStack();
 
         String temp = "";
 
+        // Checks character by character getting every variable
         for (int index = 0; index < equation.length(); index++) {
             temp += equation.charAt(index);
 
@@ -59,8 +65,8 @@ public class ExpChecker {
     /**
      * This method will check what type of
      *
-     * @param equation
-     * @return
+     * @param equation: equation from input
+     * @return expression type (pre|in|post)-fix
      */
     public ExpType getFormatType(String equation) {
         if (Helpers.isOperator(equation.charAt(0)))

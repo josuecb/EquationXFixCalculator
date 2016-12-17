@@ -1,7 +1,7 @@
 /**
  * Created by Josue on 11/16/2016.
  */
-public class AbstractStack {
+public abstract class AbstractStack {
     protected int top; // the position of the last element stored (on the top)
     protected Object[] elements; // Objects in the stack
     protected int max;
@@ -18,14 +18,18 @@ public class AbstractStack {
     }
 
 
+    /**
+     * Constructor without max size
+     */
     public AbstractStack() {
-        this.elements = new Object[255];
-        this.max = 255;
+        this.max = 1000;
+        this.elements = new Object[this.max];
         this.top = -1;
     }
 
     /**
      * Add element to stack
+     * TODO: implement when extended
      *
      * @param element: element to be added
      */
@@ -53,6 +57,7 @@ public class AbstractStack {
 
     /**
      * Get the last element from stack
+     * TODO: implement when extended
      *
      * @return Object: last element from stack
      */
@@ -62,6 +67,7 @@ public class AbstractStack {
 
     /**
      * Check whether the stack is empty or not
+     * TODO: implement when extended
      *
      * @return boolean value
      */
@@ -71,6 +77,7 @@ public class AbstractStack {
 
     /**
      * Checks whether the stack is full or not
+     * TODO: implement when extended
      *
      * @return boolean value
      */
@@ -80,6 +87,7 @@ public class AbstractStack {
 
     /**
      * Gets the current size of the stack
+     * TODO: implement when extended
      *
      * @return int current size of the stack
      */
@@ -89,17 +97,28 @@ public class AbstractStack {
 
     /**
      * Displays the stack values
+     * TODO: implement when extended
      */
     public void display() {
 
     }
 
-    protected void clone(MStack stack) {
+    /**
+     * Clones another stack
+     * TODO: implement when extended
+     *
+     * @param stack: the stack to be cloned
+     */
+    protected void clone(AbstractStack stack) {
         this.elements = stack.elements;
         this.max = stack.max;
         this.top = stack.top;
     }
 
+    /**
+     * Inverse the stack
+     * TODO: implement when extended
+     */
     protected void reverse() {
 
     }
