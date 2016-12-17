@@ -19,6 +19,9 @@ public class ExpInputParser {
         this.countSigns = 0;
     }
 
+    /**
+     * Add every character inputted and gets rid of spaces ' '
+     */
     private void fillQueue() {
         char[] letters = this.inputFromKeyboard.toCharArray();
         // removing all spaces
@@ -31,6 +34,11 @@ public class ExpInputParser {
         }
     }
 
+    /**
+     * Creates a new ExpVariable object according to the string
+     * @param completeSym: the string to be detected
+     * @return an ExpVariable object
+     */
     private ExpVariable parseSym(String completeSym) {
         String[] value = completeSym.split("=");
         // Because we are using stack it will reverse the string sometimes
@@ -43,6 +51,11 @@ public class ExpInputParser {
         }
     }
 
+    /**
+     * This class will detect what variables there are and the equation
+     * it will also allow people to input the equation and the variables with the values
+     * in one singles line for example (ab+;a=1;b=2)
+     */
     private void format() {
         String getSym = "";
         Helpers.log("Parsing", equation);
@@ -92,6 +105,12 @@ public class ExpInputParser {
         }
     }
 
+    /**
+     * Check if there is some number in the input sometimes it may bring some problems
+     *     when we input something like 123+apple/
+     *     in that case the computer doesn't know if it has to take 12 and 3 or 1 and 23
+     *     so it will check that case and will ask you to tell it what are the numbers
+     */
     private void checkForNumbers() {
         String equation = this.equation;
         MQueue eQueue = new MQueue(equation);
@@ -130,11 +149,7 @@ public class ExpInputParser {
     }
 
     /**
-     * Check if there is some number in the input sometimes it may bring some problems
-     *      when we input something like 123+apple/
-     *      in that case the computer doesn't know if it has to take 12 and 3 or 1 and 23
-     *      so it will check that case and will ask you to tell it what are the numbers
-     *      you can input them separated by ';' (e.i: 12;3)
+     *  Checks if input is separated by ';' (e.i: 12;3)
      * @throws Exception when you input a number with a letter (e.i: 12n)
      */
     private void inputNumbers() throws Exception {
