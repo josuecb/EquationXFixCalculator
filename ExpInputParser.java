@@ -11,6 +11,14 @@ public class ExpInputParser {
     private String equation;
     private int countSigns;
 
+    /**
+     * This class will make sure you input the right type of string
+     * an equation must be inputted and variables with their values.
+     *
+     * It can accept many lines in one line separated by ';' colon
+     * if there is absent one variable it will ask you to input the variable
+     * and more.
+     */
     public ExpInputParser() {
         this.inputFromKeyboard = "";
         this.queue = new MQueue();
