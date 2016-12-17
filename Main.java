@@ -4,12 +4,12 @@ public class Main {
         ExpInputParser parser = new ExpInputParser();
         parser.getInput();
 
-        ExpChecker checker = new ExpChecker(parser.getEquation(), parser.getSymbols());
+        ExpChecker checker = new ExpChecker(parser.getEquation(), parser.getVariables());
 
         Equation equation = null;
 
         try {
-            equation = new Equation(checker.getInfix(), parser.getSymbols());
+            equation = new Equation(checker.getInfix(), parser.getVariables());
             System.out.println("\n\nResult of the equation is: " + equation.doEquation());
         } catch (Exception e) {
             e.printStackTrace();

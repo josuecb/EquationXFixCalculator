@@ -140,7 +140,6 @@ public class Equation {
                             double newInt = ((ExpVariable) this.waitStack.pop()).getValue();
                             double prevInt = Double.parseDouble(tempInteger);
                             flag = removeOpenParen();
-
                             tempCount++;
                             Helpers.log("subtracting", newInt + " and " + prevInt);
                             this.waitStack.push(new ExpVariable("temp" + tempCount, newInt - prevInt));

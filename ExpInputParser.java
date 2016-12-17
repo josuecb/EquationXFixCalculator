@@ -7,14 +7,14 @@ import java.util.Scanner;
 public class ExpInputParser {
     private String inputFromKeyboard;
     private MQueue queue;
-    private ArrayList<ExpVariable> symbols;
+    private ArrayList<ExpVariable> variables;
     private String equation;
     private int countSigns;
 
     public ExpInputParser() {
         this.inputFromKeyboard = "";
         this.queue = new MQueue();
-        this.symbols = new ArrayList<>();
+        this.variables = new ArrayList<>();
         this.equation = "";
         this.countSigns = 0;
     }
@@ -36,11 +36,11 @@ public class ExpInputParser {
 
     /**
      * Creates a new ExpVariable object according to the string
-     * @param completeSym: the string to be detected
+     * @param completeVar: the string to be detected
      * @return an ExpVariable object
      */
-    private ExpVariable parseSym(String completeSym) {
-        String[] value = completeSym.split("=");
+    private ExpVariable parseVariable(String completeVar) {
+        String[] value = completeVar.split("=");
         // Because we are using stack it will reverse the string sometimes
         // depending on when we use it so in that case the value will be
         // first so it will prompt error that's why we put an exception
@@ -72,10 +72,10 @@ public class ExpInputParser {
             // break on separator ;
             if (character == ';') {
                 // checks if it is a value something like 'apple = 3'
-                //      so ti stores it on a list of symbols
+                //      so ti stores it on a list of variables
                 if (getSym.contains("=")) {
                     // get the symbol
-                    ExpVariable newSymbol = this.parseSym(getSym);
+                    ExpVariable newSymbol = this.parseVariable(getSym);
 
                     // checks if symbol is in the list
                     // find position in the list
@@ -83,10 +83,10 @@ public class ExpInputParser {
                     // override value if it is in list
 
                     if (position != -1)     // remove item
-                        this.symbols.remove(position);
+                        this.variables.remove(position);
 
                     // add it
-                    this.symbols.add(newSymbol);
+                    this.variables.add(newSymbol);
                     getSym = "";
                 } else {    // in case we do not find any symbol then it is equation
                     this.equation = getSym;
@@ -99,7 +99,7 @@ public class ExpInputParser {
 
         // Checks last string
         if (getSym.contains("=")) {
-            this.symbols.add(this.parseSym(getSym));
+            this.variables.add(this.parseVariable(getSym));
         } else {
             this.equation = getSym;
         }
@@ -134,7 +134,7 @@ public class ExpInputParser {
 
         // there must be 1 symbol more than signs to check operations
         // if not check if there are numbers declared
-        if (numbersFound.size() > 0 && this.countSigns + 1 != this.symbols.size()) {
+        if (numbersFound.size() > 0 && this.countSigns + 1 != this.variables.size()) {
             System.out.println("We have found that you have numbers.");
             System.out.println("-> Make sure to input the numbers so i can know which ones are the numbers wanted.");
             System.out.println("-> there might be cases where you have 123+apple-");
@@ -165,7 +165,7 @@ public class ExpInputParser {
             if (character == ';') {     // checks limit
                 try {
                     number = Double.parseDouble(num);
-                    this.symbols.add(new ExpVariable(num, number));
+                    this.variables.add(new ExpVariable(num, number));
                 } catch (Exception e) {
                     throw new Exception("This number contains characters, please input again.");
                 }
@@ -177,7 +177,7 @@ public class ExpInputParser {
         // for last or first number
         try {
             number = Double.parseDouble(num);
-            this.symbols.add(new ExpVariable(num, number));
+            this.variables.add(new ExpVariable(num, number));
         } catch (Exception e) {
             throw new Exception("This number contains characters, please input again.");
         }
@@ -192,7 +192,7 @@ public class ExpInputParser {
      */
     private int isInList(ExpVariable check) {
         int index = 0;
-        for (ExpVariable sym : this.symbols) {
+        for (ExpVariable sym : this.variables) {
             if (check.equals(sym))
                 return index;
             index++;
@@ -212,7 +212,7 @@ public class ExpInputParser {
             if (this.equation.equals(""))
                 System.out.println("Input Your equation or everything separated by ';': ");
             else
-                System.out.println("Input Your symbols now or many separated by ';': ");
+                System.out.println("Input Your variables now or many separated by ';': ");
 
             Scanner keyInput = new Scanner(System.in);
             this.inputFromKeyboard += keyInput.nextLine();
@@ -223,7 +223,7 @@ public class ExpInputParser {
             this.format();
 //            System.out.println("Text: " + this.inputFromKeyboard);
 
-            if (this.symbols.size() != 0 && !this.equation.isEmpty()) {
+            if (this.variables.size() != 0 && !this.equation.isEmpty()) {
                 System.out.println("Would you like to add more variables (y/n)?: ");
                 if (keyInput.next().equals("n"))
                     break;
@@ -231,7 +231,7 @@ public class ExpInputParser {
 
             this.inputFromKeyboard += ";";
 
-//            System.out.println("s: " + this.symbols.size());
+//            System.out.println("s: " + this.variables.size());
 //            System.out.println("e: " + this.equation);
         }
 
@@ -241,10 +241,18 @@ public class ExpInputParser {
         return this.inputFromKeyboard;
     }
 
-    public ArrayList<ExpVariable> getSymbols() {
-        return this.symbols;
+    /**
+     * Gets all the variables to do the operations later or convert to infix
+     * @return a list of
+     */
+    public ArrayList<ExpVariable> getVariables() {
+        return this.variables;
     }
 
+    /**
+     * Gets the equation in its raw expression
+     * @return equation string in its raw expression as how we typed it
+     */
     public String getEquation() {
         return this.equation;
     }
