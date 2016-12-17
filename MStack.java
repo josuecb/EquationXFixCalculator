@@ -38,6 +38,9 @@ public class MStack extends AbstractStack {
         System.out.println();
     }
 
+    /**
+     * Reverse the stack position (We will use it many times)
+     */
     public void reverse() {
         MStack temp = new MStack();
 
